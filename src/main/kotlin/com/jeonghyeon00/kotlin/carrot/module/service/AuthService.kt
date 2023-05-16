@@ -1,0 +1,48 @@
+package com.jeonghyeon00.kotlin.carrot.module.service
+
+import com.jeonghyeon00.kotlin.carrot.module.dto.SignUpDto
+import com.jeonghyeon00.kotlin.carrot.module.constants.Authority
+import com.jeonghyeon00.kotlin.carrot.module.dto.SignInDto
+import com.jeonghyeon00.kotlin.carrot.module.dto.TokenDto
+import com.jeonghyeon00.kotlin.carrot.module.entity.User
+import com.jeonghyeon00.kotlin.carrot.module.repository.UserRepository
+import com.jeonghyeon00.kotlin.carrot.module.security.JwtTokenProvider
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.stereotype.Service
+import javax.transaction.Transactional
+
+@Service
+class AuthService(
+    private val userRepository: UserRepository,
+    private val tokenProvider: JwtTokenProvider,
+    private val authenticationManagerBuilder: AuthenticationManagerBuilder
+) {
+    @Transactional
+    fun signUp(signUpDto: SignUpDto): Boolean {
+        val passwordEncoder = BCryptPasswordEncoder()
+        signUpDto.apply {
+            userRepository.save(
+                User(
+                    userId,
+                    passwordEncoder.encode(password),
+                    userName,
+                    Authority.USER
+                )
+            )
+        }
+        return true
+    }
+
+    fun signIn(signInDto: SignInDto): TokenDto {
+        signInDto.apply {
+            val credential = UsernamePasswordAuthenticationToken(userId, password)
+            val authentication = authenticationManagerBuilder.`object`.authenticate(credential)
+            val token = tokenProvider.createToken(authentication)
+            return TokenDto(
+                token
+            )
+        }
+    }
+}
