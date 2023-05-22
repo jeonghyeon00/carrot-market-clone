@@ -21,14 +21,16 @@ class AuthService(
 ) {
     @Transactional
     fun signUp(signUpDto: SignUpDto): Boolean {
-        val passwordEncoder = BCryptPasswordEncoder()
-        signUpDto.apply {
+        with(signUpDto) {
             userRepository.save(
                 User(
                     userId,
-                    passwordEncoder.encode(password),
+                    BCryptPasswordEncoder().encode(password),
                     userName,
-                    Authority.USER
+                    Authority.USER,
+                    nickname,
+                    phoneNumber,
+                    36.5F
                 )
             )
         }
