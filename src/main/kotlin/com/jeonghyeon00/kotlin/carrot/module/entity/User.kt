@@ -16,4 +16,4 @@ class User(
     val userName: String,
     @Enumerated(EnumType.STRING)
     val authority: Authority
-)
+) : BaseTimeEntity()
