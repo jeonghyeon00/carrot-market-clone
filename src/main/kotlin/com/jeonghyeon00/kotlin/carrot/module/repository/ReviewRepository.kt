@@ -1,8 +1,8 @@
 package com.jeonghyeon00.kotlin.carrot.module.repository
 
-import com.jeonghyeon00.kotlin.carrot.module.entity.User
+import com.jeonghyeon00.kotlin.carrot.module.entity.Review
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserRepository : JpaRepository<User, String>
+interface ReviewRepository : JpaRepository<Review, Long>
