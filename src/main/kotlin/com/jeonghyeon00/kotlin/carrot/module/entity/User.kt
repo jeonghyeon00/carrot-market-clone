@@ -15,5 +15,8 @@ class User(
     val password: String,
     val userName: String,
     @Enumerated(EnumType.STRING)
-    val authority: Authority
-)
+    val authority: Authority,
+    val nickname: String,
+    val phoneNumber: String,
+    val temperature: Float
+) : BaseTimeEntity()
