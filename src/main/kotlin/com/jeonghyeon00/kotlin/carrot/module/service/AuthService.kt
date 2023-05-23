@@ -20,6 +20,7 @@ class AuthService(
     private val userRepository: UserRepository,
     private val tokenProvider: JwtTokenProvider,
     private val authenticationManagerBuilder: AuthenticationManagerBuilder,
+    private val redisService: RedisService,
 ) {
     @Transactional
     fun signUp(signUpDto: SignUpDto): Boolean {
@@ -45,9 +46,8 @@ class AuthService(
             val credential = UsernamePasswordAuthenticationToken(userId, password)
             val authentication = authenticationManagerBuilder.`object`.authenticate(credential)
             val token = tokenProvider.createToken(authentication)
-            return TokenDto(
-                token,
-            )
+            redisService.setValues(userId, token.refreshToken)
+            return token
         }
     }
 }

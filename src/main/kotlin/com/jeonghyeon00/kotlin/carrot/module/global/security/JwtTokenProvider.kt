@@ -1,5 +1,6 @@
 package com.jeonghyeon00.kotlin.carrot.module.global.security
 
+import com.jeonghyeon00.kotlin.carrot.module.dto.TokenDto
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.io.Decoders
@@ -16,27 +17,37 @@ import javax.servlet.http.HttpServletRequest
 
 @Component
 class JwtTokenProvider(private val userDetailsService: UserDetailsService) {
+    companion object {
+        private const val accessTokenExpireTime = 30 * 60 * 1000L
+        private const val refreshTokenExpireTime = 60 * 60 * 1000L * 3
+    }
+
     @Value("\${JWT-SECRET}")
     private lateinit var secretKey: String
     lateinit var key: Key
-
-    private val tokenExpireTime = 30 * 60 * 1000L
 
     @PostConstruct
     protected fun init() {
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey))
     }
 
-    fun createToken(authentication: Authentication): String {
+    fun createToken(authentication: Authentication): TokenDto {
         val now = Date()
-        return Jwts.builder()
+        val accessToken = Jwts.builder()
             .setHeaderParam("typ", "JWT")
             .setSubject(authentication.name)
             .claim("Authorities", authentication.authorities.toString())
             .setIssuedAt(now)
-            .setExpiration(Date(now.time + tokenExpireTime))
+            .setExpiration(Date(now.time + accessTokenExpireTime))
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
+        val refreshToken = Jwts.builder()
+            .setHeaderParam("typ", "JWT")
+            .setIssuedAt(now)
+            .setExpiration(Date(now.time + refreshTokenExpireTime))
+            .signWith(key, SignatureAlgorithm.HS256)
+            .compact()
+        return TokenDto(accessToken, refreshToken)
     }
 
     fun getAuthentication(token: String): Authentication {
