@@ -1,4 +1,4 @@
-package com.jeonghyeon00.kotlin.carrot.module.security
+package com.jeonghyeon00.kotlin.carrot.module.global.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.security.authentication.AuthenticationManager
@@ -34,7 +34,7 @@ class SecurityConfiguration(private val jwtTokenProvider: JwtTokenProvider) : We
             .and()
             .addFilterBefore(
                 JwtAuthenticationFilter(jwtTokenProvider),
-                UsernamePasswordAuthenticationFilter::class.java
+                UsernamePasswordAuthenticationFilter::class.java,
             )
     }
 }
