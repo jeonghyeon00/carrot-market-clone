@@ -5,8 +5,10 @@ import com.jeonghyeon00.kotlin.carrot.module.constants.Authority
 import com.jeonghyeon00.kotlin.carrot.module.dto.SignInDto
 import com.jeonghyeon00.kotlin.carrot.module.dto.TokenDto
 import com.jeonghyeon00.kotlin.carrot.module.entity.User
+import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseException
+import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseExceptionCode
 import com.jeonghyeon00.kotlin.carrot.module.repository.UserRepository
-import com.jeonghyeon00.kotlin.carrot.module.security.JwtTokenProvider
+import com.jeonghyeon00.kotlin.carrot.module.global.security.JwtTokenProvider
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -17,11 +19,12 @@ import javax.transaction.Transactional
 class AuthService(
     private val userRepository: UserRepository,
     private val tokenProvider: JwtTokenProvider,
-    private val authenticationManagerBuilder: AuthenticationManagerBuilder
+    private val authenticationManagerBuilder: AuthenticationManagerBuilder,
 ) {
     @Transactional
     fun signUp(signUpDto: SignUpDto): Boolean {
         with(signUpDto) {
+            if (userRepository.existsByUserId(userId)) throw BaseException(BaseExceptionCode.USER_ID_CONFLICT)
             userRepository.save(
                 User(
                     userId,
@@ -30,8 +33,8 @@ class AuthService(
                     Authority.USER,
                     nickname,
                     phoneNumber,
-                    36.5F
-                )
+                    36.5F,
+                ),
             )
         }
         return true
@@ -43,7 +46,7 @@ class AuthService(
             val authentication = authenticationManagerBuilder.`object`.authenticate(credential)
             val token = tokenProvider.createToken(authentication)
             return TokenDto(
-                token
+                token,
             )
         }
     }
