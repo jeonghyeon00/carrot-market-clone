@@ -5,6 +5,8 @@ import com.jeonghyeon00.kotlin.carrot.module.constants.Authority
 import com.jeonghyeon00.kotlin.carrot.module.dto.SignInDto
 import com.jeonghyeon00.kotlin.carrot.module.dto.TokenDto
 import com.jeonghyeon00.kotlin.carrot.module.entity.User
+import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseException
+import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseExceptionCode
 import com.jeonghyeon00.kotlin.carrot.module.repository.UserRepository
 import com.jeonghyeon00.kotlin.carrot.module.global.security.JwtTokenProvider
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -22,6 +24,7 @@ class AuthService(
     @Transactional
     fun signUp(signUpDto: SignUpDto): Boolean {
         with(signUpDto) {
+            if (userRepository.existsByUserId(userId)) throw BaseException(BaseExceptionCode.USER_ID_CONFLICT)
             userRepository.save(
                 User(
                     userId,
