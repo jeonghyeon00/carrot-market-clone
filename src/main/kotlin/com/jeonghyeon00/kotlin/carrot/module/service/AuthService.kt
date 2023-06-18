@@ -20,6 +20,7 @@ class AuthService(
     private val userRepository: UserRepository,
     private val tokenProvider: JwtTokenProvider,
     private val authenticationManagerBuilder: AuthenticationManagerBuilder,
+    private val redisService: RedisService,
 ) {
     @Transactional
     fun signUp(signUpDto: SignUpDto): Boolean {
@@ -45,9 +46,22 @@ class AuthService(
             val credential = UsernamePasswordAuthenticationToken(userId, password)
             val authentication = authenticationManagerBuilder.`object`.authenticate(credential)
             val token = tokenProvider.createToken(authentication)
-            return TokenDto(
-                token,
-            )
+            redisService.setValues(userId, token.refreshToken)
+            return token
+        }
+    }
+
+    fun refresh(tokenDto: TokenDto): TokenDto {
+        val userId = tokenProvider.getUserPk(tokenDto.accessToken)
+        val savedRefreshToken = redisService.getValues(userId)
+        if (tokenDto.refreshToken == savedRefreshToken?.refreshToken) {
+            val authentication = tokenProvider.getAuthentication(tokenDto.accessToken)
+            val token = tokenProvider.createToken(authentication)
+            return TokenDto(token.accessToken, token.refreshToken).also {
+                redisService.setValues(userId, token.refreshToken)
+            }
+        } else {
+            throw BaseException(BaseExceptionCode.REFRESH_TOKEN_MISMATCH)
         }
     }
 }
