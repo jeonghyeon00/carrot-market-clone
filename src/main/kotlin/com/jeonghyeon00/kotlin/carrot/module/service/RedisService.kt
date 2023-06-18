@@ -2,6 +2,7 @@ package com.jeonghyeon00.kotlin.carrot.module.service
 
 import com.jeonghyeon00.kotlin.carrot.module.entity.RefreshToken
 import com.jeonghyeon00.kotlin.carrot.module.repository.RefreshTokenRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
@@ -18,6 +19,6 @@ class RedisService(
     }
 
     fun getValues(userId: String): RefreshToken? {
-        return refreshTokenRepository.findByUserId(userId)
+        return refreshTokenRepository.findByIdOrNull(userId)
     }
 }

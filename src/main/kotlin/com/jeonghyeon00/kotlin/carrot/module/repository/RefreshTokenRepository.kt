@@ -5,6 +5,4 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RefreshTokenRepository : CrudRepository<RefreshToken, String> {
-    fun findByUserId(userId: String): RefreshToken?
-}
+interface RefreshTokenRepository : CrudRepository<RefreshToken, String>
