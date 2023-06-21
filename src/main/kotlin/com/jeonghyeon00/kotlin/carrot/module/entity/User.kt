@@ -1,11 +1,7 @@
 package com.jeonghyeon00.kotlin.carrot.module.entity
 
 import com.jeonghyeon00.kotlin.carrot.module.constants.Authority
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "users")
@@ -18,5 +14,9 @@ class User(
     val authority: Authority,
     val nickname: String,
     val phoneNumber: String,
-    val temperature: Float
-) : BaseTimeEntity()
+    val temperature: Float,
+) : BaseTimeEntity() {
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_region")
+    val regions: List<Region> = listOf()
+}
