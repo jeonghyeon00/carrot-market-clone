@@ -18,5 +18,5 @@ class User(
 ) : BaseTimeEntity() {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_region")
-    val regions: List<Region> = listOf()
+    var regions: MutableList<Region> = mutableListOf()
 }
