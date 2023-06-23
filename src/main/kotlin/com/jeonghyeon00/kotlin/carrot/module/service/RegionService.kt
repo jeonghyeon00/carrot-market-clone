@@ -27,4 +27,11 @@ class RegionService(private val regionRepository: RegionRepository, private val 
         user.regions.removeAt(regionNumber)
         return true
     }
+
+    @Transactional
+    fun getRegions(userId: String): List<String> {
+        return userRepository.getReferenceById(userId).regions.map {
+            it.regionName
+        }
+    }
 }
