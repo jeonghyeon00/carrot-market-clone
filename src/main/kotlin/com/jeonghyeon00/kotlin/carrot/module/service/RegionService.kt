@@ -20,4 +20,11 @@ class RegionService(private val regionRepository: RegionRepository, private val 
         }
         return true
     }
+
+    @Transactional
+    fun deleteRegion(userId: String, regionNumber: Int): Boolean {
+        val user = userRepository.getReferenceById(userId)
+        user.regions.removeAt(regionNumber)
+        return true
+    }
 }
