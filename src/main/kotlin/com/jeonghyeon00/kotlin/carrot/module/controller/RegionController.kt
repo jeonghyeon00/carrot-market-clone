@@ -16,6 +16,15 @@ class RegionController(private val regionService: RegionService) {
         return regionService.deleteRegion(userId, regionNumber)
     }
 
+    @PatchMapping("/region/{regionNumber}")
+    fun patchRegion(
+        @GetIdFromToken userId: String,
+        @RequestParam(name = "regionId") regionId: Long,
+        @PathVariable(name = "regionNumber") regionNumber: Int,
+    ): Boolean {
+        return regionService.patchRegion(userId, regionId, regionNumber)
+    }
+
     @GetMapping("/regions")
     fun getRegions(@GetIdFromToken userId: String): List<String> {
         return regionService.getRegions(userId)

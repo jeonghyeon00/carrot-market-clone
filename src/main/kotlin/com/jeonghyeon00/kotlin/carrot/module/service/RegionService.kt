@@ -34,4 +34,12 @@ class RegionService(private val regionRepository: RegionRepository, private val 
             it.regionName
         }
     }
+
+    @Transactional
+    fun patchRegion(userId: String, regionId: Long, regionNumber: Int): Boolean {
+        val user = userRepository.getReferenceById(userId)
+        val region = regionRepository.getReferenceById(regionId)
+        user.regions[regionNumber] = region
+        return true
+    }
 }
