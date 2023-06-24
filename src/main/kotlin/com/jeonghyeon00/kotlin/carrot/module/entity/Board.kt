@@ -18,10 +18,18 @@ class Board(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id")
-    val region: Region
+    val region: Region,
 
 ) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val boardId: Long = 0
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id")
+    lateinit var seller: User
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "buyer_id")
+    val buyer: User? = null
 }
