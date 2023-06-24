@@ -20,11 +20,15 @@ class JwtTokenProvider(private val userDetailsService: UserDetailsService) {
     companion object {
         private const val accessTokenExpireTime = 30 * 60 * 1000L
         private const val refreshTokenExpireTime = 60 * 60 * 1000L * 3
+        private const val tokenExpireTimeDev = 60 * 60 * 1000L * 1000000
     }
 
     @Value("\${JWT-SECRET}")
     private lateinit var secretKey: String
     lateinit var key: Key
+
+    @Value("\${spring.profiles.active}")
+    private lateinit var activeProfile: String
 
     @PostConstruct
     protected fun init() {
@@ -32,19 +36,27 @@ class JwtTokenProvider(private val userDetailsService: UserDetailsService) {
     }
 
     fun createToken(authentication: Authentication): TokenDto {
+        val accessTokenRefreshTime = when (activeProfile) {
+            "develop" -> tokenExpireTimeDev
+            else -> accessTokenExpireTime
+        }
+        val refreshTokenRefreshTime = when (activeProfile) {
+            "develop" -> tokenExpireTimeDev
+            else -> refreshTokenExpireTime
+        }
         val now = Date()
         val accessToken = Jwts.builder()
             .setHeaderParam("typ", "JWT")
             .setSubject(authentication.name)
             .claim("Authorities", authentication.authorities.toString())
             .setIssuedAt(now)
-            .setExpiration(Date(now.time + accessTokenExpireTime))
+            .setExpiration(Date(now.time + accessTokenRefreshTime))
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
         val refreshToken = Jwts.builder()
             .setHeaderParam("typ", "JWT")
             .setIssuedAt(now)
-            .setExpiration(Date(now.time + refreshTokenExpireTime))
+            .setExpiration(Date(now.time + refreshTokenRefreshTime))
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
         return TokenDto(accessToken, refreshToken)
