@@ -1,6 +1,6 @@
 package com.jeonghyeon00.kotlin.carrot.module.global.security
 
-import com.jeonghyeon00.kotlin.carrot.module.dto.TokenDto
+import com.jeonghyeon00.kotlin.carrot.module.dto.authDto.TokenDto
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.io.Decoders

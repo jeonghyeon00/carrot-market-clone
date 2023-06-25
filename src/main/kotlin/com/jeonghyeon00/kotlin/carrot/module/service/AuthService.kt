@@ -1,9 +1,9 @@
 package com.jeonghyeon00.kotlin.carrot.module.service
 
-import com.jeonghyeon00.kotlin.carrot.module.dto.SignUpDto
+import com.jeonghyeon00.kotlin.carrot.module.dto.authDto.SignUpDto
 import com.jeonghyeon00.kotlin.carrot.module.constants.Authority
-import com.jeonghyeon00.kotlin.carrot.module.dto.SignInDto
-import com.jeonghyeon00.kotlin.carrot.module.dto.TokenDto
+import com.jeonghyeon00.kotlin.carrot.module.dto.authDto.SignInDto
+import com.jeonghyeon00.kotlin.carrot.module.dto.authDto.TokenDto
 import com.jeonghyeon00.kotlin.carrot.module.entity.User
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseException
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseExceptionCode
