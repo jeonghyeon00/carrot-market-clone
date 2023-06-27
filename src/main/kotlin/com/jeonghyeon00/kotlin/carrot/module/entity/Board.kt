@@ -10,7 +10,7 @@ class Board(
     val category: Category,
     val title: String,
     val description: String,
-    val viewCount: Long,
+    var viewCount: Long,
     val price: Int,
 
     @Enumerated(EnumType.STRING)

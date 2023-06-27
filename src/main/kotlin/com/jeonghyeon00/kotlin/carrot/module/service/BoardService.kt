@@ -3,6 +3,7 @@ package com.jeonghyeon00.kotlin.carrot.module.service
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardReq
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardReq.Companion.toBoard
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardPageRes
+import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardRes
 import com.jeonghyeon00.kotlin.carrot.module.entity.Board
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseException
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseExceptionCode
@@ -46,7 +47,9 @@ class BoardService(
     }
 
     @Transactional
-    fun getBoard(boardId: Long): Board {
-        return boardRepository.getReferenceById(boardId)
+    fun getBoard(boardId: Long): BoardRes {
+        val board = boardRepository.getReferenceById(boardId)
+        board.viewCount++
+        return BoardRes.toBoardRes(board)
     }
 }
