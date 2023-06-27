@@ -1,7 +1,7 @@
 package com.jeonghyeon00.kotlin.carrot.module.controller
 
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardReq
-import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardRes
+import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardPageRes
 import com.jeonghyeon00.kotlin.carrot.module.entity.Board
 import com.jeonghyeon00.kotlin.carrot.module.global.security.GetIdFromToken
 import com.jeonghyeon00.kotlin.carrot.module.service.BoardService
@@ -30,8 +30,13 @@ class BoardController(
     }
 
     @GetMapping("/boards")
-    fun getBoards(@PageableDefault pageable: Pageable): Page<BoardRes> {
+    fun getBoards(@PageableDefault pageable: Pageable): Page<BoardPageRes> {
         return boardService.getBoards(pageable)
+    }
+
+    @DeleteMapping("/board/{boardId}")
+    fun getBoard(@PathVariable(name = "boardId") boardId: Long): Board {
+        return boardService.getBoard(boardId)
     }
 
     @DeleteMapping("/board/{boardId}")

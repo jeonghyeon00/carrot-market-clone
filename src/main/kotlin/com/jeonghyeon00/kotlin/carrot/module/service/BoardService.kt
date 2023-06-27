@@ -2,7 +2,7 @@ package com.jeonghyeon00.kotlin.carrot.module.service
 
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardReq
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardReq.Companion.toBoard
-import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardRes
+import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardPageRes
 import com.jeonghyeon00.kotlin.carrot.module.entity.Board
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseException
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseExceptionCode
@@ -28,12 +28,13 @@ class BoardService(
     }
 
     @Transactional
-    fun getBoards(pageable: Pageable): Page<BoardRes> {
+    fun getBoards(pageable: Pageable): Page<BoardPageRes> {
         return boardRepository.findAll(pageable).map {
-            BoardRes.toBoardRes(it)
+            BoardPageRes.toBoardPageRes(it)
         }
     }
 
+    @Transactional
     fun deleteBoard(userId: String, boardId: Long): Boolean {
         val board = boardRepository.getReferenceById(boardId)
         if (board.seller.userId == userId) {
@@ -42,5 +43,10 @@ class BoardService(
         } else {
             throw BaseException(BaseExceptionCode.NOT_YOUR_BOARD)
         }
+    }
+
+    @Transactional
+    fun getBoard(boardId: Long): Board {
+        return boardRepository.getReferenceById(boardId)
     }
 }
