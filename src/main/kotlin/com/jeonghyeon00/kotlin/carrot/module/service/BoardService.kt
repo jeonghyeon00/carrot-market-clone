@@ -33,4 +33,14 @@ class BoardService(
             BoardRes.toBoardRes(it)
         }
     }
+
+    fun deleteBoard(userId: String, boardId: Long): Boolean {
+        val board = boardRepository.getReferenceById(boardId)
+        if (board.seller.userId == userId) {
+            boardRepository.delete(board)
+            return true
+        } else {
+            throw BaseException(BaseExceptionCode.NOT_YOUR_BOARD)
+        }
+    }
 }
