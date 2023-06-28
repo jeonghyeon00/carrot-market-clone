@@ -52,4 +52,20 @@ class BoardService(
         board.viewCount++
         return BoardRes.toBoardRes(board)
     }
+
+    @Transactional
+    fun patchBoard(userId: String, boardId: Long, boardReq: BoardReq): Boolean {
+        val board = boardRepository.getReferenceById(boardId)
+        if (board.seller.userId == userId) {
+            with(board) {
+                category = boardReq.category
+                title = boardReq.title
+                description = boardReq.description
+                price = boardReq.price
+            }
+        } else {
+            throw BaseException(BaseExceptionCode.NOT_YOUR_BOARD)
+        }
+        return true
+    }
 }

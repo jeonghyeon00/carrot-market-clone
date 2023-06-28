@@ -7,11 +7,11 @@ import javax.persistence.*
 @Entity
 class Board(
     @Enumerated(EnumType.STRING)
-    val category: Category,
-    val title: String,
-    val description: String,
+    var category: Category,
+    var title: String,
+    var description: String,
     var viewCount: Long,
-    val price: Int,
+    var price: Int,
 
     @Enumerated(EnumType.STRING)
     val boardStatus: BoardStatus,
