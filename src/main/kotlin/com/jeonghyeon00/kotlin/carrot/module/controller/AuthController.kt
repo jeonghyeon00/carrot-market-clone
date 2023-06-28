@@ -1,8 +1,8 @@
 package com.jeonghyeon00.kotlin.carrot.module.controller
 
-import com.jeonghyeon00.kotlin.carrot.module.dto.SignInDto
-import com.jeonghyeon00.kotlin.carrot.module.dto.SignUpDto
-import com.jeonghyeon00.kotlin.carrot.module.dto.TokenDto
+import com.jeonghyeon00.kotlin.carrot.module.dto.authDto.SignInDto
+import com.jeonghyeon00.kotlin.carrot.module.dto.authDto.SignUpDto
+import com.jeonghyeon00.kotlin.carrot.module.dto.authDto.TokenDto
 import com.jeonghyeon00.kotlin.carrot.module.service.AuthService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
