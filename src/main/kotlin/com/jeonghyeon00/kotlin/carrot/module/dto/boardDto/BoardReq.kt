@@ -2,6 +2,7 @@ package com.jeonghyeon00.kotlin.carrot.module.dto.boardDto
 
 import com.jeonghyeon00.kotlin.carrot.module.constants.BoardStatus
 import com.jeonghyeon00.kotlin.carrot.module.constants.Category
+import com.jeonghyeon00.kotlin.carrot.module.dto.imageDto.ImageReq
 import com.jeonghyeon00.kotlin.carrot.module.entity.Board
 import com.jeonghyeon00.kotlin.carrot.module.entity.Region
 import com.jeonghyeon00.kotlin.carrot.module.entity.User
@@ -11,6 +12,7 @@ data class BoardReq(
     val title: String,
     val description: String,
     val price: Int,
+    val images: List<ImageReq>,
 ) {
     companion object {
         fun BoardReq.toBoard(user: User, region: Region): Board {

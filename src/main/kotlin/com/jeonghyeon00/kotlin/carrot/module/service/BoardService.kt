@@ -4,10 +4,12 @@ import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardReq
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardReq.Companion.toBoard
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardPageRes
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardRes
+import com.jeonghyeon00.kotlin.carrot.module.dto.imageDto.ImageReq.Companion.toImage
 import com.jeonghyeon00.kotlin.carrot.module.entity.Board
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseException
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseExceptionCode
 import com.jeonghyeon00.kotlin.carrot.module.repository.BoardRepository
+import com.jeonghyeon00.kotlin.carrot.module.repository.ImageRepository
 import com.jeonghyeon00.kotlin.carrot.module.repository.RegionRepository
 import com.jeonghyeon00.kotlin.carrot.module.repository.UserRepository
 import org.springframework.data.domain.Page
@@ -21,11 +23,18 @@ class BoardService(
     private val boardRepository: BoardRepository,
     private val userRepository: UserRepository,
     private val regionRepository: RegionRepository,
+    private val imageRepository: ImageRepository,
 ) {
     @Transactional
     fun postBoard(userId: String, regionNumber: Int, boardReq: BoardReq): Board {
         val user = userRepository.findByIdOrNull(userId) ?: throw BaseException(BaseExceptionCode.USER_NOT_FOUND)
-        return boardRepository.save(boardReq.toBoard(user, user.regions[regionNumber]))
+        val board = boardRepository.save(boardReq.toBoard(user, user.regions[regionNumber]))
+        imageRepository.saveAll(
+            boardReq.images.map {
+                it.toImage(board)
+            },
+        )
+        return board
     }
 
     @Transactional
