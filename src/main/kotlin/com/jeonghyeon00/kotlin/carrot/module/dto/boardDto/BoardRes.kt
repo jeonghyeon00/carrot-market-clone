@@ -1,5 +1,6 @@
 package com.jeonghyeon00.kotlin.carrot.module.dto.boardDto
 
+import com.jeonghyeon00.kotlin.carrot.module.dto.imageDto.ImageRes
 import com.jeonghyeon00.kotlin.carrot.module.entity.Board
 
 data class BoardRes(
@@ -11,6 +12,7 @@ data class BoardRes(
     val viewCount: Long,
     val category: String,
     val regionName: String,
+    val images: List<ImageRes>,
 ) {
     companion object {
         fun toBoardRes(board: Board): BoardRes {
@@ -24,6 +26,9 @@ data class BoardRes(
                     viewCount,
                     category.krName,
                     region.regionName,
+                    images.map {
+                        ImageRes.toDto(it)
+                    },
                 )
             }
         }
