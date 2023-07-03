@@ -32,4 +32,7 @@ class Board(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id")
     val buyer: User? = null
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var images: MutableList<Image> = mutableListOf()
 }
