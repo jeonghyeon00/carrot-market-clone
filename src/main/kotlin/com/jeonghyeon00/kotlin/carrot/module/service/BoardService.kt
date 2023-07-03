@@ -29,7 +29,7 @@ class BoardService(
     fun postBoard(userId: String, regionNumber: Int, boardReq: BoardReq): Board {
         val user = userRepository.findByIdOrNull(userId) ?: throw BaseException(BaseExceptionCode.USER_NOT_FOUND)
         val board = boardRepository.save(boardReq.toBoard(user, user.regions[regionNumber]))
-        imageRepository.saveAll(
+        board.images.addAll(
             boardReq.images.map {
                 it.toImage(board)
             },
@@ -71,6 +71,12 @@ class BoardService(
                 title = boardReq.title
                 description = boardReq.description
                 price = boardReq.price
+                images.clear()
+                images.addAll(
+                    boardReq.images.map {
+                        it.toImage(board)
+                    },
+                )
             }
         } else {
             throw BaseException(BaseExceptionCode.NOT_YOUR_BOARD)
