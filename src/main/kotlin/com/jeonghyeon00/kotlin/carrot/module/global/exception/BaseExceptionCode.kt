@@ -17,4 +17,5 @@ enum class BaseExceptionCode(val httpStatusCode: Int, val message: String) {
 
     // 409 CONFLICT
     USER_ID_CONFLICT(HttpStatus.CONFLICT.value(), "아이디가 중복입니다."),
+    DUPLICATE_WISHLIST(HttpStatus.CONFLICT.value(), "이미 위시리스트에 존재합니다."),
 }

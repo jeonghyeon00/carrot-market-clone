@@ -6,12 +6,10 @@ import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardPageRes
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardRes
 import com.jeonghyeon00.kotlin.carrot.module.dto.imageDto.ImageReq.Companion.toImage
 import com.jeonghyeon00.kotlin.carrot.module.entity.Board
+import com.jeonghyeon00.kotlin.carrot.module.entity.WishList
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseException
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseExceptionCode
-import com.jeonghyeon00.kotlin.carrot.module.repository.BoardRepository
-import com.jeonghyeon00.kotlin.carrot.module.repository.ImageRepository
-import com.jeonghyeon00.kotlin.carrot.module.repository.RegionRepository
-import com.jeonghyeon00.kotlin.carrot.module.repository.UserRepository
+import com.jeonghyeon00.kotlin.carrot.module.repository.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -23,7 +21,8 @@ class BoardService(
     private val boardRepository: BoardRepository,
     private val userRepository: UserRepository,
     private val regionRepository: RegionRepository,
-    private val imageRepository: ImageRepository,
+    private val wishListRepository: WishListRepository,
+
 ) {
     @Transactional
     fun postBoard(userId: String, regionNumber: Int, boardReq: BoardReq): Board {
@@ -81,6 +80,17 @@ class BoardService(
         } else {
             throw BaseException(BaseExceptionCode.NOT_YOUR_BOARD)
         }
+        return true
+    }
+
+    @Transactional
+    fun addWishList(userId: String, boardId: Long): Boolean {
+        val board = boardRepository.getReferenceById(boardId)
+        val user = userRepository.getReferenceById(userId)
+        if (wishListRepository.existsByBoardAndUser(board, user)) {
+            throw BaseException(BaseExceptionCode.DUPLICATE_WISHLIST)
+        }
+        wishListRepository.save(WishList(user, board))
         return true
     }
 }

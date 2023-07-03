@@ -12,6 +12,7 @@ data class BoardRes(
     val viewCount: Long,
     val category: String,
     val regionName: String,
+    val wishListCount: Int,
     val images: List<ImageRes>,
 ) {
     companion object {
@@ -26,6 +27,7 @@ data class BoardRes(
                     viewCount,
                     category.krName,
                     region.regionName,
+                    wishListCount ?: 0,
                     images.map {
                         ImageRes.toDto(it)
                     },

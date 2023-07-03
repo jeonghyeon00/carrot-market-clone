@@ -31,12 +31,12 @@ class BoardController(
         return boardService.postBoard(userId, regionNumber, boardReq)
     }
 
-    @GetMapping("/boards")
+    @GetMapping("/boards") // 지역 반영
     fun getBoards(@PageableDefault pageable: Pageable): Page<BoardPageRes> {
         return boardService.getBoards(pageable)
     }
 
-    @GetMapping("/board/{boardId}")
+    @GetMapping("/board/{boardId}") // 지역 반영
     fun getBoard(@PathVariable(name = "boardId") boardId: Long): BoardRes {
         return boardService.getBoard(boardId)
     }
@@ -53,5 +53,10 @@ class BoardController(
         @RequestBody boardReq: BoardReq,
     ): Boolean {
         return boardService.patchBoard(userId, boardId, boardReq)
+    }
+
+    @PostMapping("/board/{boardId}/wishList")
+    fun addWishList(@GetIdFromToken userId: String, @PathVariable(name = "boardId") boardId: Long): Boolean {
+        return boardService.addWishList(userId, boardId)
     }
 }
