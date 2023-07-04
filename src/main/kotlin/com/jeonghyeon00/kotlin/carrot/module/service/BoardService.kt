@@ -6,12 +6,10 @@ import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardPageRes
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardRes
 import com.jeonghyeon00.kotlin.carrot.module.dto.imageDto.ImageReq.Companion.toImage
 import com.jeonghyeon00.kotlin.carrot.module.entity.Board
+import com.jeonghyeon00.kotlin.carrot.module.entity.WishList
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseException
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseExceptionCode
-import com.jeonghyeon00.kotlin.carrot.module.repository.BoardRepository
-import com.jeonghyeon00.kotlin.carrot.module.repository.ImageRepository
-import com.jeonghyeon00.kotlin.carrot.module.repository.RegionRepository
-import com.jeonghyeon00.kotlin.carrot.module.repository.UserRepository
+import com.jeonghyeon00.kotlin.carrot.module.repository.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -23,7 +21,8 @@ class BoardService(
     private val boardRepository: BoardRepository,
     private val userRepository: UserRepository,
     private val regionRepository: RegionRepository,
-    private val imageRepository: ImageRepository,
+    private val wishListRepository: WishListRepository,
+
 ) {
     @Transactional
     fun postBoard(userId: String, regionNumber: Int, boardReq: BoardReq): Board {
@@ -38,8 +37,9 @@ class BoardService(
     }
 
     @Transactional
-    fun getBoards(pageable: Pageable): Page<BoardPageRes> {
-        return boardRepository.findAll(pageable).map {
+    fun getBoards(userId: String, pageable: Pageable): Page<BoardPageRes> {
+        val regions = userRepository.findByIdOrNull(userId)?.regions
+        return boardRepository.findAllByRegionIn(regions!!, pageable).map {
             BoardPageRes.toBoardPageRes(it)
         }
     }
@@ -56,10 +56,15 @@ class BoardService(
     }
 
     @Transactional
-    fun getBoard(boardId: Long): BoardRes {
+    fun getBoard(userId: String, boardId: Long): BoardRes {
+        val user = userRepository.getReferenceById(userId)
         val board = boardRepository.getReferenceById(boardId)
-        board.viewCount++
-        return BoardRes.toBoardRes(board)
+        if (user.regions.contains(board.region)) {
+            board.viewCount++
+            return BoardRes.toBoardRes(board)
+        } else {
+            throw BaseException(BaseExceptionCode.NOT_YOUR_REGION)
+        }
     }
 
     @Transactional
@@ -81,6 +86,25 @@ class BoardService(
         } else {
             throw BaseException(BaseExceptionCode.NOT_YOUR_BOARD)
         }
+        return true
+    }
+
+    @Transactional
+    fun addWishList(userId: String, boardId: Long): Boolean {
+        val board = boardRepository.getReferenceById(boardId)
+        val user = userRepository.getReferenceById(userId)
+        if (wishListRepository.existsByBoardAndUser(board, user)) {
+            throw BaseException(BaseExceptionCode.DUPLICATE_WISHLIST)
+        }
+        wishListRepository.save(WishList(user, board))
+        return true
+    }
+
+    @Transactional
+    fun deleteWishList(userId: String, boardId: Long): Boolean {
+        val board = boardRepository.getReferenceById(boardId)
+        val user = userRepository.getReferenceById(userId)
+        wishListRepository.deleteByBoardAndUser(board, user)
         return true
     }
 }

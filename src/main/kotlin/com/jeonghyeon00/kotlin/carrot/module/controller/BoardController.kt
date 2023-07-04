@@ -32,13 +32,13 @@ class BoardController(
     }
 
     @GetMapping("/boards")
-    fun getBoards(@PageableDefault pageable: Pageable): Page<BoardPageRes> {
-        return boardService.getBoards(pageable)
+    fun getBoards(@GetIdFromToken userId: String, @PageableDefault pageable: Pageable): Page<BoardPageRes> {
+        return boardService.getBoards(userId, pageable)
     }
 
-    @GetMapping("/board/{boardId}")
-    fun getBoard(@PathVariable(name = "boardId") boardId: Long): BoardRes {
-        return boardService.getBoard(boardId)
+    @GetMapping("/board/{boardId}") // 지역 반영
+    fun getBoard(@GetIdFromToken userId: String, @PathVariable(name = "boardId") boardId: Long): BoardRes {
+        return boardService.getBoard(userId, boardId)
     }
 
     @DeleteMapping("/board/{boardId}")
@@ -53,5 +53,15 @@ class BoardController(
         @RequestBody boardReq: BoardReq,
     ): Boolean {
         return boardService.patchBoard(userId, boardId, boardReq)
+    }
+
+    @PostMapping("/board/{boardId}/wishList")
+    fun addWishList(@GetIdFromToken userId: String, @PathVariable(name = "boardId") boardId: Long): Boolean {
+        return boardService.addWishList(userId, boardId)
+    }
+
+    @DeleteMapping("/board/{boardId}/wishList")
+    fun deleteWishList(@GetIdFromToken userId: String, @PathVariable(name = "boardId") boardId: Long): Boolean {
+        return boardService.deleteWishList(userId, boardId)
     }
 }

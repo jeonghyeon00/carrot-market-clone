@@ -2,6 +2,7 @@ package com.jeonghyeon00.kotlin.carrot.module.entity
 
 import com.jeonghyeon00.kotlin.carrot.module.constants.BoardStatus
 import com.jeonghyeon00.kotlin.carrot.module.constants.Category
+import org.hibernate.annotations.Formula
 import javax.persistence.*
 
 @Entity
@@ -35,4 +36,7 @@ class Board(
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = [CascadeType.ALL], orphanRemoval = true)
     var images: MutableList<Image> = mutableListOf()
+
+    @Formula("(select count(*) from wish_list where wish_list.board_id = board_id)")
+    val wishListCount: Int? = null
 }

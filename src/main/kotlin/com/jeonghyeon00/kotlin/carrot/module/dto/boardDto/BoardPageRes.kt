@@ -7,6 +7,7 @@ data class BoardPageRes(
     val title: String,
     val boardStatus: BoardStatus,
     val regionName: String,
+    val wishListCount: Int,
 ) {
     companion object {
         fun toBoardPageRes(board: Board): BoardPageRes {
@@ -15,6 +16,7 @@ data class BoardPageRes(
                     title,
                     boardStatus,
                     region.regionName,
+                    wishListCount ?: 0,
                 )
             }
         }
