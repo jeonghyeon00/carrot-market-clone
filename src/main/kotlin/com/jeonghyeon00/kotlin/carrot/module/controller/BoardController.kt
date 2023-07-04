@@ -37,8 +37,8 @@ class BoardController(
     }
 
     @GetMapping("/board/{boardId}") // 지역 반영
-    fun getBoard(@PathVariable(name = "boardId") boardId: Long): BoardRes {
-        return boardService.getBoard(boardId)
+    fun getBoard(@GetIdFromToken userId: String, @PathVariable(name = "boardId") boardId: Long): BoardRes {
+        return boardService.getBoard(userId, boardId)
     }
 
     @DeleteMapping("/board/{boardId}")

@@ -56,10 +56,15 @@ class BoardService(
     }
 
     @Transactional
-    fun getBoard(boardId: Long): BoardRes {
+    fun getBoard(userId: String, boardId: Long): BoardRes {
+        val user = userRepository.getReferenceById(userId)
         val board = boardRepository.getReferenceById(boardId)
-        board.viewCount++
-        return BoardRes.toBoardRes(board)
+        if (user.regions.contains(board.region)) {
+            board.viewCount++
+            return BoardRes.toBoardRes(board)
+        } else {
+            throw BaseException(BaseExceptionCode.NOT_YOUR_REGION)
+        }
     }
 
     @Transactional
