@@ -37,8 +37,9 @@ class BoardService(
     }
 
     @Transactional
-    fun getBoards(pageable: Pageable): Page<BoardPageRes> {
-        return boardRepository.findAll(pageable).map {
+    fun getBoards(userId: String, pageable: Pageable): Page<BoardPageRes> {
+        val regions = userRepository.findByIdOrNull(userId)?.regions
+        return boardRepository.findAllByRegionIn(regions!!, pageable).map {
             BoardPageRes.toBoardPageRes(it)
         }
     }

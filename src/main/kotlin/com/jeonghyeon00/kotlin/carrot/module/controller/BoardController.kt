@@ -31,9 +31,9 @@ class BoardController(
         return boardService.postBoard(userId, regionNumber, boardReq)
     }
 
-    @GetMapping("/boards") // 지역 반영
-    fun getBoards(@PageableDefault pageable: Pageable): Page<BoardPageRes> {
-        return boardService.getBoards(pageable)
+    @GetMapping("/boards")
+    fun getBoards(@GetIdFromToken userId: String, @PageableDefault pageable: Pageable): Page<BoardPageRes> {
+        return boardService.getBoards(userId, pageable)
     }
 
     @GetMapping("/board/{boardId}") // 지역 반영
