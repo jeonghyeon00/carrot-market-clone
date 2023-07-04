@@ -93,4 +93,12 @@ class BoardService(
         wishListRepository.save(WishList(user, board))
         return true
     }
+
+    @Transactional
+    fun deleteWishList(userId: String, boardId: Long): Boolean {
+        val board = boardRepository.getReferenceById(boardId)
+        val user = userRepository.getReferenceById(userId)
+        wishListRepository.deleteByBoardAndUser(board, user)
+        return true
+    }
 }

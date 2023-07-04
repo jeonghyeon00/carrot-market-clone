@@ -59,4 +59,9 @@ class BoardController(
     fun addWishList(@GetIdFromToken userId: String, @PathVariable(name = "boardId") boardId: Long): Boolean {
         return boardService.addWishList(userId, boardId)
     }
+
+    @DeleteMapping("/board/{boardId}/wishList")
+    fun deleteWishList(@GetIdFromToken userId: String, @PathVariable(name = "boardId") boardId: Long): Boolean {
+        return boardService.deleteWishList(userId, boardId)
+    }
 }

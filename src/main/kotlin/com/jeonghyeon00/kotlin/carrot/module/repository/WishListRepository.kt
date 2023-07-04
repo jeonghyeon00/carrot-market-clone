@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface WishListRepository : JpaRepository<WishList, Long> {
     fun existsByBoardAndUser(board: Board, user: User): Boolean
+    fun deleteByBoardAndUser(board: Board, user: User): Int
 }
