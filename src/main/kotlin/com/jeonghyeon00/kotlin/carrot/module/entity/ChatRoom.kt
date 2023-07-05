@@ -9,12 +9,8 @@ class ChatRoom(
     val buyer: User,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id")
-    val seller: User,
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    val board: Board
+    val board: Board,
 ) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
