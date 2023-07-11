@@ -18,8 +18,14 @@ spring:
         format-sql: true
   profiles:
     active: develop
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
 
 server:
   port: 8080
+
 
 JWT-SECRET: ${JWT_SECRET}
