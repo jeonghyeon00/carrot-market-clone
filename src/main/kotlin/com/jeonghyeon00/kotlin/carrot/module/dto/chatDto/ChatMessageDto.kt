@@ -1,11 +1,12 @@
 package com.jeonghyeon00.kotlin.carrot.module.dto.chatDto
 
 import com.jeonghyeon00.kotlin.carrot.module.entity.ChatMessage
+import java.time.LocalDateTime
 
 data class ChatMessageDto(
     val userName: String,
     val content: String,
-    val chatroomId: Long,
+    val createdDate: LocalDateTime,
 ) {
     companion object {
         fun chatMessageToDto(chatMessage: ChatMessage): ChatMessageDto {
@@ -13,7 +14,7 @@ data class ChatMessageDto(
                 return ChatMessageDto(
                     sender.userName,
                     content,
-                    chatRoom.chatRoomId,
+                    chatMessage.getCreatedDateTime(),
                 )
             }
         }

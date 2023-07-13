@@ -18,4 +18,8 @@ abstract class BaseTimeEntity {
     @LastModifiedDate
     @Column(nullable = false)
     protected var lastModifiedDate: LocalDateTime = LocalDateTime.now()
+
+    fun getCreatedDateTime(): LocalDateTime {
+        return createdDate
+    }
 }
