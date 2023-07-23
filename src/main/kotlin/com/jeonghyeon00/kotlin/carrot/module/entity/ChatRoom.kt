@@ -15,4 +15,7 @@ class ChatRoom(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val chatRoomId: Long = 0
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "chatRoom")
+    val chatMessages: List<ChatMessage> = listOf()
 }

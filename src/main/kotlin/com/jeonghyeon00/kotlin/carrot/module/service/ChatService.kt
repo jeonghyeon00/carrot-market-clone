@@ -1,11 +1,13 @@
 package com.jeonghyeon00.kotlin.carrot.module.service
 
 import com.jeonghyeon00.kotlin.carrot.module.dto.chatDto.ChatMessageDto
+import com.jeonghyeon00.kotlin.carrot.module.dto.chatDto.ChatRoomsDto
 import com.jeonghyeon00.kotlin.carrot.module.entity.ChatRoom
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseException
 import com.jeonghyeon00.kotlin.carrot.module.global.exception.BaseExceptionCode
 import com.jeonghyeon00.kotlin.carrot.module.repository.*
 import org.springframework.stereotype.Service
+import javax.transaction.Transactional
 
 @Service
 class ChatService(
@@ -22,6 +24,7 @@ class ChatService(
         return true
     }
 
+    @Transactional
     fun getAllMessages(chatroomId: Long, userId: String): List<ChatMessageDto> {
         val chatRoom = chatRoomRepository.getReferenceById(chatroomId)
         if (chatRoom.buyer.userId != userId && chatRoom.board.seller.userId != userId) {
@@ -29,6 +32,13 @@ class ChatService(
         }
         return chatMessageRepository.findAllByChatRoom(chatRoom).map {
             ChatMessageDto.chatMessageToDto(it)
+        }
+    }
+
+    @Transactional
+    fun getChatRooms(userId: String): List<ChatRoomsDto> {
+        return chatRoomRepository.findAllByUserId(userId).map {
+            ChatRoomsDto.toDto(it)
         }
     }
 }
