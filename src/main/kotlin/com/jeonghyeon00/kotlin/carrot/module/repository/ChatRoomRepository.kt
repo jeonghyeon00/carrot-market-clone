@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ChatRoomRepository : JpaRepository<ChatRoom, Long> {
     @Query(
-        value = " select c from ChatRoom c join c.buyer cb join c.board cb2 where cb.userId =:userId or cb2.seller.userId =:userId",
+        value = " select distinct c from ChatRoom c join fetch c.buyer cb join fetch c.board cb2 join fetch cb2.seller cbseller join fetch c.chatMessages join fetch cb2.region where cb.userId =:userId or cbseller.userId =:userId",
     )
     fun findAllByUserId(@Param(value = "userId") userId: String): List<ChatRoom>
 }
