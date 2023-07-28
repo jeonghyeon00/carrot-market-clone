@@ -1,5 +1,6 @@
 package com.jeonghyeon00.kotlin.carrot.module.service
 
+import com.jeonghyeon00.kotlin.carrot.module.constants.BoardStatus
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardReq
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardReq.Companion.toBoard
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardPageRes
@@ -106,5 +107,32 @@ class BoardService(
         val user = userRepository.getReferenceById(userId)
         wishListRepository.deleteByBoardAndUser(board, user)
         return true
+    }
+
+    @Transactional
+    fun reservation(userId: String, boardId: Long): Boolean {
+        val board = boardRepository.getReferenceById(boardId)
+        if (board.boardStatus != BoardStatus.COMPLETE && isUsersBoard(userId, board)) {
+            board.boardStatus = BoardStatus.RESERVATION
+        } else {
+            throw BaseException(BaseExceptionCode.ALREADY_COMPLETE)
+        }
+        return true
+    }
+
+    @Transactional
+    fun complete(userId: String, boardId: Long, buyerId: String): Boolean {
+        val board = boardRepository.getReferenceById(boardId)
+        if (isUsersBoard(userId, board)) {
+            board.boardStatus = BoardStatus.COMPLETE
+            board.buyer = userRepository.getReferenceById(buyerId)
+        } else {
+            throw BaseException(BaseExceptionCode.NOT_YOUR_BOARD)
+        }
+        return true
+    }
+
+    fun isUsersBoard(userId: String, board: Board): Boolean {
+        return board.seller.userId == userId
     }
 }

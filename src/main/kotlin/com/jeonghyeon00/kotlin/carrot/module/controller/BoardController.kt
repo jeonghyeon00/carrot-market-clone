@@ -64,4 +64,18 @@ class BoardController(
     fun deleteWishList(@GetIdFromToken userId: String, @PathVariable(name = "boardId") boardId: Long): Boolean {
         return boardService.deleteWishList(userId, boardId)
     }
+
+    @PostMapping("/board/{boardId}/reservation")
+    fun reservation(@GetIdFromToken userId: String, @PathVariable(name = "boardId") boardId: Long): Boolean {
+        return boardService.reservation(userId, boardId)
+    }
+
+    @PostMapping("/board/{boardId}/complete")
+    fun complete(
+        @GetIdFromToken userId: String,
+        @PathVariable(name = "boardId") boardId: Long,
+        @RequestParam buyerId: String,
+    ): Boolean {
+        return boardService.complete(userId, boardId, buyerId)
+    }
 }
