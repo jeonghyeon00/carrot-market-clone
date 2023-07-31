@@ -5,6 +5,7 @@ import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardReq
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardReq.Companion.toBoard
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardPageRes
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardRes
+import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.WishListDto
 import com.jeonghyeon00.kotlin.carrot.module.dto.imageDto.ImageReq.Companion.toImage
 import com.jeonghyeon00.kotlin.carrot.module.entity.Board
 import com.jeonghyeon00.kotlin.carrot.module.entity.WishList
@@ -130,6 +131,13 @@ class BoardService(
             throw BaseException(BaseExceptionCode.NOT_YOUR_BOARD)
         }
         return true
+    }
+
+    @Transactional
+    fun getWishList(userId: String): List<WishListDto> {
+        return wishListRepository.getAllByUser(userRepository.getReferenceById(userId)).map {
+            WishListDto.toDto(it)
+        }
     }
 
     fun isUsersBoard(userId: String, board: Board): Boolean {
