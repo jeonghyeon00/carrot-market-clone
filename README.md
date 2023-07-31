@@ -5,7 +5,7 @@ https://github.com/jeonghyeon00/kotlin-spring-boot-boilerplate
 
 JWT Boilerplate 사용
 
-<h1>📚 STACKS</h1></div>
+## 📚 STACKS</div>
 <h3> Tech Stack </h3>
 
 - Kotlin
@@ -17,3 +17,10 @@ JWT Boilerplate 사용
 - JWT
 - Redis
 - STOMP
+
+
+## ERD
+
+https://dbdiagram.io/d/646304fddca9fb07c425183f
+
+<img width="1250" alt="image" src="https://github.com/jeonghyeon00/carrot-market-clone/assets/56068392/05e946d6-f466-4f9b-85db-7a2a01d77d6f">
