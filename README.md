@@ -12,6 +12,8 @@ JWT Boilerplate 사용
 - Spring Boot 2.7.4
 - Gradle 7.5
 - PostgreSQL
-- Spring Data Jpa
+- Spring Data JPA
 - Spring Security
 - JWT
+- Redis
+- STOMP
