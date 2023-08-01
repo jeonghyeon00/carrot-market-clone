@@ -28,13 +28,15 @@ https://dbdiagram.io/d/646304fddca9fb07c425183f
 ## 구현내용
 
 - Spring Security를 활용한 JWT 토큰 사용, Redis를 사용한 RefreshToken 구현
+- Authorization Header에 있는 JWT토큰에서 userId를 추출하는 어노테이션 생성하여 사용
+- @Formula를 활용해 위시리스트의 등록한 사람의 수 카운팅
 - Spring Websocket & STOMP를 활용한 실시간 채팅 및 채팅 내용 저장
 - 지역에 기반한 게시글 검색 및 거래 기능
 - 게시글 위시리스트 및 리뷰 기능
 - 리뷰로 조정되는 매너온도
 
-## 트러블슈팅
 
+## 트러블슈팅
 
 
 <details>
