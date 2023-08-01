@@ -14,7 +14,7 @@ class User(
     val authority: Authority,
     val nickname: String,
     val phoneNumber: String,
-    val temperature: Float,
+    var temperature: Float,
 ) : BaseTimeEntity() {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_region")
