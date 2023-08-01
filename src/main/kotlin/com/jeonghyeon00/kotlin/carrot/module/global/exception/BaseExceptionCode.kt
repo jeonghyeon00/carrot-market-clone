@@ -12,6 +12,8 @@ enum class BaseExceptionCode(val httpStatusCode: Int, val message: String) {
     // 403 FORBIDDEN
     NOT_YOUR_BOARD(HttpStatus.FORBIDDEN.value(), "작성자가 아닙니다."),
     NOT_YOUR_REGION(HttpStatus.FORBIDDEN.value(), "본인의 지역의 게시글이 아닙니다."),
+    NOT_YOUR_CHATROOM(HttpStatus.FORBIDDEN.value(), "당신의 채팅방이 아닙니다."),
+    ALREADY_COMPLETE(HttpStatus.FORBIDDEN.value(), "이미 완료된 거래이거나 권한이 없습니다."),
 
     // 404 NOT FOUND
     USER_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "아이디가 존재하지 않습니다."),

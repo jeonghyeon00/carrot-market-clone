@@ -15,7 +15,7 @@ class Board(
     var price: Int,
 
     @Enumerated(EnumType.STRING)
-    val boardStatus: BoardStatus,
+    var boardStatus: BoardStatus,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id")
@@ -32,7 +32,7 @@ class Board(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id")
-    val buyer: User? = null
+    var buyer: User? = null
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = [CascadeType.ALL], orphanRemoval = true)
     var images: MutableList<Image> = mutableListOf()

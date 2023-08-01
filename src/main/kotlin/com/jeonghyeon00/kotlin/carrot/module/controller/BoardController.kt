@@ -3,6 +3,7 @@ package com.jeonghyeon00.kotlin.carrot.module.controller
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardReq
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardPageRes
 import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.BoardRes
+import com.jeonghyeon00.kotlin.carrot.module.dto.boardDto.WishListDto
 import com.jeonghyeon00.kotlin.carrot.module.entity.Board
 import com.jeonghyeon00.kotlin.carrot.module.global.security.GetIdFromToken
 import com.jeonghyeon00.kotlin.carrot.module.service.BoardService
@@ -60,8 +61,27 @@ class BoardController(
         return boardService.addWishList(userId, boardId)
     }
 
+    @GetMapping("/board/wishList")
+    fun getWishList(@GetIdFromToken userId: String): List<WishListDto> {
+        return boardService.getWishList(userId)
+    }
+
     @DeleteMapping("/board/{boardId}/wishList")
     fun deleteWishList(@GetIdFromToken userId: String, @PathVariable(name = "boardId") boardId: Long): Boolean {
         return boardService.deleteWishList(userId, boardId)
+    }
+
+    @PostMapping("/board/{boardId}/reservation")
+    fun reservation(@GetIdFromToken userId: String, @PathVariable(name = "boardId") boardId: Long): Boolean {
+        return boardService.reservation(userId, boardId)
+    }
+
+    @PostMapping("/board/{boardId}/complete")
+    fun complete(
+        @GetIdFromToken userId: String,
+        @PathVariable(name = "boardId") boardId: Long,
+        @RequestParam buyerId: String,
+    ): Boolean {
+        return boardService.complete(userId, boardId, buyerId)
     }
 }
